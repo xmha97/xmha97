@@ -13,9 +13,9 @@ I'm Muhammad Hussein from Iran, and I love coding for fun.
 
 ### Hi there 👋
 
-[![wakatime](https://wakatime.com/badge/user/9f52e350-622b-4173-b3a1-5a704449bc5a.svg)](https://wakatime.com/@9f52e350-622b-4173-b3a1-5a704449bc5a)
-[![twitter](https://img.shields.io/twitter/follow/carlosgandarez?label=followers&logo=twitter&color=%23007ec6&style=plastic)](https://twitter.com/carlosgandarez)
-[![github](https://img.shields.io/github/followers/gandarez?logo=github&style=plastic)](https://github.com/gandarez?tab=followers)
+[![wakatime](https://wakatime.com/badge/user/93f6367f-6e10-4036-a84d-bbc47f9b1fcd.svg)](https://wakatime.com/@93f6367f-6e10-4036-a84d-bbc47f9b1fcd)
+[![twitter](https://img.shields.io/twitter/follow/carlosgandarez?label=followers&logo=twitter&color=%23007ec6&style=plastic)](https://twitter.com/xmha97)
+[![github](https://img.shields.io/github/followers/xmha97?logo=github&style=plastic)](https://github.com/xmha97?tab=followers)
 
 - 🔭 I’m currently working on [https://coinbase.com](https://coinbase.com)
 - Contributor at [https://wakatime.com](https://wakatime.com)
