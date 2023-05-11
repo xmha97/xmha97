@@ -9,8 +9,8 @@ I'm Muhammad Hussein from Iran, and I love coding for fun.
 
 ### Hi there 👋
 
-[![wakatime](https://wakatime.com/badge/user/93f6367f-6e10-4036-a84d-bbc47f9b1fcd.svg)](https://wakatime.com/@28f33631-f82d-4ced-a330-b0c91604206b)
-[![twitter](https://img.shields.io/twitter/follow/carlosgandarez?label=followers&logo=twitter&color=%23007ec6&style=plastic)](https://twitter.com/xmha97)
+[![wakatime](https://wakatime.com/badge/user/28f33631-f82d-4ced-a330-b0c91604206b.svg)](https://wakatime.com/@28f33631-f82d-4ced-a330-b0c91604206b)
+[![twitter](https://img.shields.io/twitter/follow/xmha97?label=followers&logo=twitter&color=%23007ec6&style=plastic)](https://twitter.com/xmha97)
 [![github](https://img.shields.io/github/followers/xmha97?logo=github&style=plastic)](https://github.com/xmha97?tab=followers)
 
 <!--
