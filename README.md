@@ -1,4 +1,4 @@
-# Muhammad Hussein Ammari <img src=https://github.githubassets.com/images/icons/emoji/octocat.png height=30px>
+# Muhammadhussein Ammari <img src=https://github.githubassets.com/images/icons/emoji/octocat.png height=30px>
 I'm Muhammad Hussein from Iran, and I love coding for fun.
 
 ## Skills and Experience
