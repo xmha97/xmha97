@@ -1,16 +1,15 @@
 name: 📄✨ Release CV
+
 on:
   push:
-    paths:
-      - .github/workflows/latex.yaml
-      - '**.tex'
+    branches:
+      - main
   workflow_dispatch:
-  
+
 jobs:
-  build_latex:
+  build_and_release:
     runs-on: ubuntu-latest
     steps:
-
       - name: 🛠️ Checkout Repository
         uses: actions/checkout@v4
 
@@ -18,13 +17,24 @@ jobs:
         uses: wtfjoke/setup-tectonic@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: 🏗️ Build Resume in LaTeX
         run: tectonic -X build
 
+      - name: 🏷️ Create Tag
+        id: tag
+        run: |
+          TAG=release-$(date +%Y-%m-%d)
+          echo "Tag=$TAG" >> $GITHUB_ENV
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag $TAG
+          git push origin $TAG
+
       - name: ✨ Create Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: build/xmha97/MuhammadhusseinAmmari.pdf
+          files: build/MuhammadhusseinAmmari.pdf
+          tag_name: ${{ env.Tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
