@@ -42,7 +42,7 @@ jobs:
 
       - name: Create or reuse tag
         run: |
-          TAG=$(date +%Y-%m-%d)
+          TAG=v$(date +%y.%m.%d)
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
