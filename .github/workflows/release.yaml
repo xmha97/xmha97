@@ -18,7 +18,7 @@ jobs:
       - name: Build PDF
         run: |
           rm -rf build/ && mkdir -p build
-          tectonic main.tex -X build 2> build/latex_errors.log || { cat build/latex_errors.log; exit 1; }
+          tectonic -X build 2> build/latex_errors.log || { cat build/latex_errors.log; exit 1; }
 
       - name: Find PDF
         run: |
