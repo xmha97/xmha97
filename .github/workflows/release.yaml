@@ -1,40 +1,37 @@
-name: 📄✨ Release CV
+name: 📝 Check LaTeX Build
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build_and_release:
+  check_latex:
     runs-on: ubuntu-latest
     steps:
-      - name: 🛠️ Checkout Repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🚀 Set Up Tectonic
+      - name: Set up Tectonic
         uses: wtfjoke/setup-tectonic@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🏗️ Build Resume in LaTeX
-        run: tectonic -X build
-
-      - name: 🏷️ Create Tag
-        id: tag
+      - name: Build PDF and capture errors
+        id: build
         run: |
-          TAG=$(date +%Y-%m-%d)
-          echo "Tag=$TAG" >> $GITHUB_ENV
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag $TAG
-          git push origin $TAG
+          set -e
+          rm -rf build/
+          mkdir -p build
+          if ! tectonic -X build 2> build/latex_errors.log; then
+            echo "LaTeX build failed! See build/latex_errors.log"
+            cat build/latex_errors.log
+            exit 1
+          fi
+          echo "LaTeX build succeeded!"
 
-      - name: ✨ Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: build/MuhammadhusseinAmmari.pdf
-          tag_name: ${{ env.Tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Find generated PDF
+        run: |
+          echo "Searching for PDF files..."
+          find build/ -type f -name "*.pdf" || echo "No PDF found!"
