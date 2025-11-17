@@ -1,0 +1,59 @@
+% Muhammadhussein Ammari's CV
+% Based on moderncv class
+
+\documentclass[11pt, a4paper, sans, final]{moderncv}
+
+\moderncvcolor{grey}
+\moderncvstyle{banking}
+
+% Adjust the page margins
+\usepackage[scale=0.85]{geometry}
+\recomputelengths{}
+
+% Font loading
+\ifxetexorluatex
+  \usepackage{fontspec}
+  \usepackage{unicode-math}
+ % \defaultfontfeatures{Ligatures=TeX}
+ % \setmainfont{Latin Modern Roman}
+ % \setsansfont{Latin Modern Sans}
+ % \setmonofont{Latin Modern Mono}
+ % \setmathfont{Latin Modern Math}
+\else
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{kpfonts} % Softer, modern serif font
+\usepackage[scaled=0.9]{helvet} % Helvetica for sans-serif text
+\usepackage{courier} % Courier for monospaced text
+\fi
+
+% Personal data
+\name{Muhammadhussein}{Ammari}
+\title{Backend Developer}
+\phone[mobile]{+98 938 518 3277}
+\email{6ammari@gmail.com}
+%\born{16 June 1997}
+
+% Social Media Profiles
+\social[github]{xmha97}
+\social[linkedin]{xmha97}
+
+\begin{document}
+\maketitle
+
+\input{cv/experiences.tex}
+\input{cv/openSourceProjects.tex}
+\input{cv/skills.tex}
+\input{cv/educations.tex}
+%\input{cv/languages.tex}
+
+\emptysection{}\closesection{}
+\vfill
+\begin{center}
+    \textit{I hereby certify that the information provided is accurate and reflects my professional experience to the best of my knowledge.}
+    \vspace{1em}
+
+    \textbf{Muhammadhussein Ammari}\hspace{4cm}\today
+\end{center}
+
+\end{document}

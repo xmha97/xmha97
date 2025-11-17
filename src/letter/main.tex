@@ -1,0 +1,40 @@
+\documentclass[11pt,letter,sans,final]{moderncv}
+
+\moderncvstyle{banking}
+\moderncvcolor{burgundy}
+
+% Adjust the page margins
+\usepackage[scale=0.8]{geometry}
+
+% Font loading
+\ifxetexorluatex
+  \usepackage{fontspec}
+  \usepackage{unicode-math}
+\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+\fi
+
+% Personal data
+\name{Muhammadhussein}{Ammari}
+\title{Jr. Backend Developer}
+\phone[mobile]{+98 938 518 3277}
+\email{6ammari@gmail.com}
+\born{16 June 1997}
+
+\begin{document}
+
+\recipient{Recruitment Team}{Company, Inc.\\123 Some Street\\Some City, Country}
+\date{\today}
+\opening{Dear Hiring Manager,}
+\closing{Yours faithfully,}
+
+% Title for the letter
+\makelettertitle
+
+letter text here
+
+\makeletterclosing
+
+\end{document}

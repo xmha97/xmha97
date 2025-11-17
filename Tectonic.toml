@@ -1,0 +1,13 @@
+[doc]
+name = "MuhammadhusseinAmmari.pdf"
+bundle = "https://data1.fullyjustified.net/tlextras-2022.0r0.tar"
+
+# One or more output specifications
+[[output]]
+name = "MuhammadhusseinAmmari"              # The output's name
+type = "pdf"               # The output's type
+tex_format = "latex"       # The TeX format to use
+shell_escape = true        # Allow shell escape (\write18)
+index = "main.tex"         # The LaTeX source file to use
+preamble = ""              # Optional preamble file
+postamble = ""             # Optional postamble file

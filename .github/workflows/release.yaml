@@ -1,0 +1,30 @@
+name: 📄✨ Release CV
+on:
+  push:
+    paths:
+      - .github/workflows/latex.yaml
+      - '**.tex'
+  workflow_dispatch:
+  
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 🛠️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🚀 Set Up Tectonic
+        uses: wtfjoke/setup-tectonic@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🏗️ Build Resume in LaTeX
+        run: tectonic -X build
+
+      - name: ✨ Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/xmha97/MuhammadhusseinAmmari.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
