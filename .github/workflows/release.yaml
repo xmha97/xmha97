@@ -2,58 +2,41 @@ name: 📄✨ Release CV
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Tectonic
-        uses: wtfjoke/setup-tectonic@v3
+      - uses: wtfjoke/setup-tectonic@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build PDF and capture errors
-        id: build
+      - name: Build PDF
         run: |
-          set -e
-          rm -rf build/
-          mkdir -p build
-          if ! tectonic -X build 2> build/latex_errors.log; then
-            echo "LaTeX build failed! See build/latex_errors.log"
-            cat build/latex_errors.log
-            exit 1
-          fi
-          echo "LaTeX build succeeded!"
+          rm -rf build/ && mkdir -p build
+          tectonic main.tex -X build 2> build/latex_errors.log || { cat build/latex_errors.log; exit 1; }
 
-      - name: Find generated PDF
-        id: find_pdf
+      - name: Find PDF
         run: |
           PDF_PATH=$(find build/ -type f -name "*.pdf" | head -n 1)
-          if [ -z "$PDF_PATH" ]; then
-            echo "No PDF found!"
-            exit 1
-          fi
+          [ -z "$PDF_PATH" ] && echo "No PDF found!" && exit 1
           echo "PDF_PATH=$PDF_PATH" >> $GITHUB_ENV
-          echo "Found PDF: $PDF_PATH"
 
-      - name: Create Tag
-        id: tag
+      - name: Tag & Release
         run: |
           TAG=$(date +%Y-%m-%d)
-          echo "Tag=$TAG" >> $GITHUB_ENV
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag $TAG
           git push origin $TAG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - uses: softprops/action-gh-release@v1
         with:
           files: ${{ env.PDF_PATH }}
           tag_name: ${{ env.Tag }}
