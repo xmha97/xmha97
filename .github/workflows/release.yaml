@@ -42,20 +42,28 @@ jobs:
           echo "PDF_PATH=$PDF_PATH" >> $GITHUB_ENV
           echo "Found PDF: $PDF_PATH"
 
-      - name: Create Tag
+      - name: Create or reuse tag
         id: tag
         run: |
           TAG=$(date +%Y-%m-%d)
-          echo "Tag=$TAG" >> $GITHUB_ENV
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag $TAG
-          git push origin $TAG
+          
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists, reusing it."
+          else
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi
 
-      - name: Create Release
+          echo "Tag=$TAG" >> $GITHUB_ENV
+
+      - name: Create or update Release
+        id: release
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ env.PDF_PATH }}
           tag_name: ${{ env.Tag }}
+          files: ${{ env.PDF_PATH }}
+          overwrite: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
