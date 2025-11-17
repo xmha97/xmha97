@@ -24,7 +24,7 @@ jobs:
       - name: 🏷️ Create Tag
         id: tag
         run: |
-          TAG=release-$(date +%Y-%m-%d)
+          TAG=$(date +%Y-%m-%d)
           echo "Tag=$TAG" >> $GITHUB_ENV
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
