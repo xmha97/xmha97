@@ -64,7 +64,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.Tag }}
-          name: "CV Release – ${{ env.Tag }}"
+          name: "${{ env.Tag }}"
           files: ${{ env.PDF_PATH }}
           overwrite: true
           draft: false
