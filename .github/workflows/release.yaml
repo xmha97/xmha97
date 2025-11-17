@@ -19,39 +19,40 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build PDF and capture errors
-        id: build
         run: |
           set -e
           rm -rf build/
           mkdir -p build
           if ! tectonic -X build 2> build/latex_errors.log; then
-            echo "LaTeX build failed! See build/latex_errors.log"
+            echo "❌ LaTeX build failed! See build/latex_errors.log"
             cat build/latex_errors.log
             exit 1
           fi
-          echo "LaTeX build succeeded!"
+          echo "✅ LaTeX build succeeded!"
 
       - name: Find generated PDF
-        id: find_pdf
         run: |
           PDF_PATH=$(find build/ -type f -name "*.pdf" | head -n 1)
           if [ -z "$PDF_PATH" ]; then
-            echo "No PDF found!"
+            echo "❌ No PDF found!"
             exit 1
           fi
           echo "PDF_PATH=$PDF_PATH" >> $GITHUB_ENV
           echo "Found PDF: $PDF_PATH"
 
       - name: Create or reuse tag
-        id: tag
         run: |
           TAG=$(date +%Y-%m-%d)
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists, reusing it."
+
+          echo "Fetching remote tags..."
+          git fetch --tags
+
+          if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists. Reusing it."
           else
+            echo "Creating new tag $TAG"
             git tag "$TAG"
             git push origin "$TAG"
           fi
@@ -59,8 +60,7 @@ jobs:
           echo "Tag=$TAG" >> $GITHUB_ENV
 
       - name: Create or update Release
-        id: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.Tag }}
           files: ${{ env.PDF_PATH }}
