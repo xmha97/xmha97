@@ -17,15 +17,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Show repository files
-        run: |
-          pwd
-          ls -lah
-          find . -name "*.tex"
-
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:
+          working_directory: src
           root_file: main.tex
           latexmk_use_xelatex: true
 
