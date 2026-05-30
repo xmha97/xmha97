@@ -1,59 +1,67 @@
-% Muhammadhussein Ammari's CV
-% Based on moderncv class
+name: 📄✨ Release CV
 
-\documentclass[11pt, a4paper, sans, final]{moderncv}
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-\moderncvcolor{grey}
-\moderncvstyle{banking}
+permissions:
+  contents: write
 
-% Adjust the page margins
-\usepackage[scale=0.85]{geometry}
-\recomputelengths{}
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
 
-% Font loading
-\ifxetexorluatex
-  \usepackage{fontspec}
-  \usepackage{unicode-math}
- % \defaultfontfeatures{Ligatures=TeX}
- % \setmainfont{Latin Modern Roman}
- % \setsansfont{Latin Modern Sans}
- % \setmonofont{Latin Modern Mono}
- % \setmathfont{Latin Modern Math}
-\else
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{kpfonts} % Softer, modern serif font
-\usepackage[scaled=0.9]{helvet} % Helvetica for sans-serif text
-\usepackage{courier} % Courier for monospaced text
-\fi
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-% Personal data
-\name{MH}{Ammari}
-\title{Backend Developer}
-\phone[mobile]{+98 938 518 3277}
-\email{6ammari@gmail.com}
-%\born{16 June 1997}
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: src/main.tex
+          latexmk_use_xelatex: true
 
-% Social Media Profiles
-\social[github]{xmha97}
-\social[linkedin]{6ammari}
+      - name: Find generated PDF
+        run: |
+          PDF_PATH=$(find . -type f -name "*.pdf" | head -n 1)
 
-\begin{document}
-\maketitle
+          if [ -z "$PDF_PATH" ]; then
+            echo "❌ No PDF found!"
+            exit 1
+          fi
 
-\input{summary.tex}
-\input{experiences.tex}
-% \input{projects.tex}
-\input{skills.tex}
-\input{certifications.tex}
-\input{educations.tex}
-%\input{languages.tex}
+          echo "PDF_PATH=$PDF_PATH" >> $GITHUB_ENV
+          echo "Found PDF: $PDF_PATH"
 
-% \emptysection{}\closesection{}
-% \vfill
-% \begin{center}
-%     \vspace{1em}
-%     \textbf{Muhammadhussein Ammari}\hspace{4cm}\today
-% \end{center}
+      - name: Create or reuse tag
+        run: |
+          TAG=v$(date +%y.%m.%d)
 
-\end{document}
+          git fetch --tags
+
+          if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi
+
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Create or update Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: ${{ env.TAG }}
+          files: ${{ env.PDF_PATH }}
+          overwrite: true
+          draft: false
+          prerelease: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
