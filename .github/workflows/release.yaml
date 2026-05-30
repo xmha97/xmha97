@@ -1,67 +1,67 @@
 name: 📄✨ Release CV
 
 on:
-push:
-branches:
-- main
-workflow_dispatch:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 permissions:
-contents: write
+  contents: write
 
 jobs:
-build_and_release:
-runs-on: ubuntu-latest
+  build_and_release:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-  - name: Compile LaTeX
-    uses: xu-cheng/latex-action@v3
-    with:
-      root_file: cv.tex
-      latexmk_use_xelatex: true
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: cv.tex
+          latexmk_use_xelatex: true
 
-  - name: Find generated PDF
-    run: |
-      PDF_PATH=$(find . -type f -name "*.pdf" | head -n 1)
+      - name: Find generated PDF
+        run: |
+          PDF_PATH=$(find . -type f -name "*.pdf" | head -n 1)
 
-      if [ -z "$PDF_PATH" ]; then
-        echo "❌ No PDF found!"
-        exit 1
-      fi
+          if [ -z "$PDF_PATH" ]; then
+            echo "❌ No PDF found!"
+            exit 1
+          fi
 
-      echo "PDF_PATH=$PDF_PATH" >> $GITHUB_ENV
-      echo "Found PDF: $PDF_PATH"
+          echo "PDF_PATH=$PDF_PATH" >> $GITHUB_ENV
+          echo "Found PDF: $PDF_PATH"
 
-  - name: Create or reuse tag
-    run: |
-      TAG=v$(date +%y.%m.%d)
+      - name: Create or reuse tag
+        run: |
+          TAG=v$(date +%y.%m.%d)
 
-      git fetch --tags
+          git fetch --tags
 
-      if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
-        echo "Tag $TAG already exists."
-      else
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
 
-        git tag "$TAG"
-        git push origin "$TAG"
-      fi
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi
 
-      echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "TAG=$TAG" >> $GITHUB_ENV
 
-  - name: Create or update Release
-    uses: softprops/action-gh-release@v2
-    with:
-      tag_name: ${{ env.TAG }}
-      name: ${{ env.TAG }}
-      files: ${{ env.PDF_PATH }}
-      overwrite: true
-      draft: false
-      prerelease: false
-      make_latest: true
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create or update Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: ${{ env.TAG }}
+          files: ${{ env.PDF_PATH }}
+          overwrite: true
+          draft: false
+          prerelease: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
